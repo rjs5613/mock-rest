@@ -48,7 +48,7 @@ public class ResponseDetails {
 		aResponse.withBody(body);
 		aResponse.withStatus(status);
 		for(KeyValue header : headers) {
-			for(String val  : header.getValue()) {
+			for(String val  : header.getValues()) {
 				aResponse.withHeader(header.getKey(), val);
 			}
 		}
@@ -65,7 +65,7 @@ public class ResponseDetails {
 		all.forEach(header->{
 			KeyValue keyValue = new KeyValue();
 			keyValue.setKey(header.caseInsensitiveKey().toString());
-			keyValue.setValue(header.values());
+			keyValue.setValues(header.values());
 			headers.add(keyValue);
 		});
 		responseDetails.setHeaders(headers);

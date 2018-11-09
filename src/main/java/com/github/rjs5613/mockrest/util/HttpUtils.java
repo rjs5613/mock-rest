@@ -61,7 +61,7 @@ public class HttpUtils {
 		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
 		for(KeyValue header : requestDetails.getHeaders()) {
-			List<String> value = header.getValue();
+			List<String> value = header.getValues();
 			for(String val : value) {
 				headers.set(header.getKey(), val);
 			}
@@ -69,7 +69,7 @@ public class HttpUtils {
 		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(host).path(requestDetails.getPath());
 		for(KeyValue queryParam : requestDetails.getQueryParams()) {
-			for(String val : queryParam.getValue()) {
+			for(String val : queryParam.getValues()) {
 				builder.queryParam(queryParam.getKey(), val);
 			}
 		}

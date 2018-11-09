@@ -9,7 +9,7 @@ public class KeyValue {
 	private String key;
 	
 	@JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-	private List<String> value;
+	private List<String> values;
 	
 	public String getKey() {
 		return key;
@@ -19,17 +19,17 @@ public class KeyValue {
 		this.key = key;
 	}
 	
-	public List<String> getValue() {
-		return value;
+	public List<String> getValues() {
+		return values;
 	}
 	
-	public void setValue(List<String> value) {
-		this.value = value;
+	public void setValues(List<String> value) {
+		this.values = value;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("{key=%s, value=%s}", key, value);
+		return String.format("{key=%s, values=%s}", key, values);
 	}
 
 }

@@ -133,13 +133,13 @@ public class RequestDetails {
 		}
 
 		for (KeyValue headers : getHeaders()) {
-			for (String value : headers.getValue()) {
+			for (String value : headers.getValues()) {
 				mappingBuilder.withHeader(headers.getKey(), WireMockUtils.getEqulPattern(value));
 			}
 		}
 
 		for (KeyValue queryParam : getQueryParams()) {
-			for (String value : queryParam.getValue()) {
+			for (String value : queryParam.getValues()) {
 				mappingBuilder.withHeader(queryParam.getKey(), WireMockUtils.getEqulPattern(value));
 			}
 		}
@@ -171,7 +171,7 @@ public class RequestDetails {
 		for (Entry<String, List<String>> entry : entries.entrySet()) {
 			KeyValue keyValue = new KeyValue();
 			keyValue.setKey(entry.getKey());
-			keyValue.setValue(entry.getValue());
+			keyValue.setValues(entry.getValue());
 			queryParams.add(keyValue);
 		}
 		return queryParams;
@@ -196,7 +196,7 @@ public class RequestDetails {
 				valuePattern.getValue();
 				KeyValue keyValue = new KeyValue();
 				keyValue.setKey(key);
-				keyValue.setValue(Arrays.asList(valuePattern.getValue()));
+				keyValue.setValues(Arrays.asList(valuePattern.getValue()));
 				headers.add(keyValue);
 			}
 		}
