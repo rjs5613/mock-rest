@@ -5,6 +5,7 @@ package com.github.rjs5613.mockrest.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -47,9 +48,11 @@ class MongoMappingService implements MappingService {
 
 	@Override
 	public void saveAllMappings(Collection<StubMapping> stubMappings) {
-		stubMappings.forEach(mapping->{
-			saveMapping(mapping);
+		Collection<JSONObject> mappings = new HashSet<>();
+		stubMappings.forEach(stubMapping->{
+			mappings.add(new JSONObject(Json.write(stubMapping)));
 		});
+		mongoTemplate.insert(mappings, MAPPINGS_COLLECTION);
 	}
 
 	@Override
@@ -60,6 +63,5 @@ class MongoMappingService implements MappingService {
 
 	@Override
 	public void deleteAll() {
-		
 	}
 }
