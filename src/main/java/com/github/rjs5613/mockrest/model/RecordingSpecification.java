@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class RecordingSpecification {
 
 	private String hostUrl;
@@ -38,6 +40,7 @@ public class RecordingSpecification {
 		this.commonHeaders = commonHeaders;
 	}
 
+	@JsonIgnore
 	public Set<String> getAllHeaders() {
 		Set<String> headers = new HashSet<>();
 		getCommonHeaders().forEach(keyValue -> {
