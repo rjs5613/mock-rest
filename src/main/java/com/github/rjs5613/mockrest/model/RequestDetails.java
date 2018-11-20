@@ -1,16 +1,19 @@
 package com.github.rjs5613.mockrest.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -37,8 +40,8 @@ public class RequestDetails {
 
 	private String path;
 	private HttpMethod method;
-	private List<KeyValue> headers;
-	private List<KeyValue> queryParams;
+	private Set<KeyValue> headers;
+	private Set<KeyValue> queryParams;
 	private String body;
 
 	public String getPath() {
@@ -57,26 +60,28 @@ public class RequestDetails {
 		this.method = HttpMethod.valueOf(method.toUpperCase());
 	}
 
-	public List<KeyValue> getHeaders() {
+	public Set<KeyValue> getHeaders() {
 		if (Objects.isNull(headers)) {
-			return Collections.emptyList();
+			return Collections.emptySet();
 		}
 		return headers;
 	}
 
-	public void setHeaders(List<KeyValue> headers) {
-		this.headers = headers;
+	public void setHeaders(Set<KeyValue> headers) {
+		this.headers = new TreeSet<KeyValue>(new KeyValue.KeyBasedComparator());
+		this.headers.addAll(headers);
 	}
 
-	public List<KeyValue> getQueryParams() {
+	public Set<KeyValue> getQueryParams() {
 		if (Objects.isNull(queryParams)) {
-			return Collections.emptyList();
+			return Collections.emptySet();
 		}
 		return queryParams;
 	}
 
-	public void setQueryParams(List<KeyValue> queryParams) {
-		this.queryParams = queryParams;
+	public void setQueryParams(Set<KeyValue> queryParams) {
+		this.queryParams = new TreeSet<KeyValue>(new KeyValue.KeyBasedComparator());
+		this.queryParams.addAll(queryParams);
 	}
 
 	public String getBody() {
@@ -155,8 +160,8 @@ public class RequestDetails {
 	public static RequestDetails fromHttpRequest(HttpServletRequest httpServletRequest) {
 		Map<String, List<String>> headers2 = HttpUtils.getHeaders(httpServletRequest);
 		Map<String, List<String>> queryParams2 = HttpUtils.getQueryParams(httpServletRequest);
-		List<KeyValue> queryParams = getKeyValue(queryParams2);
-		List<KeyValue> headers = getKeyValue(headers2);
+		Set<KeyValue> queryParams = getKeyValue(queryParams2);
+		Set<KeyValue> headers = getKeyValue(headers2);
 		String path = httpServletRequest.getRequestURI();
 		RequestDetails requestDetails = new RequestDetails();
 		requestDetails.setPath(path);
@@ -166,8 +171,8 @@ public class RequestDetails {
 		return requestDetails;
 	}
 
-	private static List<KeyValue> getKeyValue(Map<String, List<String>> entries) {
-		List<KeyValue> queryParams = new ArrayList<>();
+	private static Set<KeyValue> getKeyValue(Map<String, List<String>> entries) {
+		Set<KeyValue> queryParams = new TreeSet<>(new KeyValue.KeyBasedComparator());
 		for (Entry<String, List<String>> entry : entries.entrySet()) {
 			KeyValue keyValue = new KeyValue();
 			keyValue.setKey(entry.getKey());
@@ -186,10 +191,10 @@ public class RequestDetails {
 		return requestDetails;
 	}
 
-	private static List<KeyValue> getKeyValuePairs(Map<String, MultiValuePattern> headers2) {
-		List<KeyValue> headers = new ArrayList<>();
-		if (Objects.nonNull(headers2)) {
-			for (Entry<String, MultiValuePattern> entrySet : headers2.entrySet()) {
+	private static Set<KeyValue> getKeyValuePairs(Map<String, MultiValuePattern> keyValueMap) {
+		Set<KeyValue> keyValues = new TreeSet<>(new KeyValue.KeyBasedComparator());
+		if (Objects.nonNull(keyValueMap)) {
+			for (Entry<String, MultiValuePattern> entrySet : keyValueMap.entrySet()) {
 				String key = entrySet.getKey();
 				MultiValuePattern value = entrySet.getValue();
 				StringValuePattern valuePattern = value.getValuePattern();
@@ -197,10 +202,19 @@ public class RequestDetails {
 				KeyValue keyValue = new KeyValue();
 				keyValue.setKey(key);
 				keyValue.setValues(Arrays.asList(valuePattern.getValue()));
-				headers.add(keyValue);
+				keyValues.add(keyValue);
 			}
 		}
-		return headers;
+		return keyValues;
+	}
+
+	public void addHeaders(Collection<KeyValue> commonHeaders) {
+		if(null == headers) {
+			headers = new TreeSet<>(new KeyValue.KeyBasedComparator());
+		}
+		if(!CollectionUtils.isEmpty(commonHeaders)) {
+			headers.addAll(commonHeaders);
+		}
 	}
 
 }

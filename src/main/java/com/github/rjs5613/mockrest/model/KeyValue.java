@@ -1,5 +1,6 @@
 package com.github.rjs5613.mockrest.model;
 
+import java.util.Comparator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -30,6 +31,15 @@ public class KeyValue {
 	@Override
 	public String toString() {
 		return String.format("{key=%s, values=%s}", key, values);
+	}
+	
+	public static class KeyBasedComparator implements Comparator<KeyValue>{
+
+		@Override
+		public int compare(KeyValue o1, KeyValue o2) {
+			return o1.getKey().compareTo(o2.getKey());
+		}
+		
 	}
 
 }

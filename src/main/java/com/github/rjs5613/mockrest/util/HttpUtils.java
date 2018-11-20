@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +21,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.github.rjs5613.mockrest.model.KeyValue;
 import com.github.rjs5613.mockrest.model.RequestDetails;
 
+/**
+ * 
+ * @author rrajeshkumar
+ *
+ */
 @Component
 public class HttpUtils {
 	
@@ -35,16 +39,26 @@ public class HttpUtils {
 	
 	private static RestTemplate restTemplate;
 	
+	/**
+	 * 
+	 * @param httpServletRequest
+	 * @return
+	 */
 	public static Map<String, List<String>> getQueryParams(HttpServletRequest httpServletRequest) {
 		Enumeration<String> attributeNames = httpServletRequest.getParameterNames();
-		Map<String, List<String>> headers = new HashMap<>();
+		Map<String, List<String>> queryParams = new HashMap<>();
 		while(attributeNames.hasMoreElements()) {
 			String nextElement = attributeNames.nextElement();
-			headers.put(nextElement, Arrays.asList(httpServletRequest.getParameterValues(nextElement)));
+			queryParams.put(nextElement, Arrays.asList(httpServletRequest.getParameterValues(nextElement)));
 		}
-		return headers;
+		return queryParams;
 	}
 
+	/**
+	 * 
+	 * @param httpServletRequest
+	 * @return
+	 */
 	public static Map<String, List<String>> getHeaders(HttpServletRequest httpServletRequest) {
 		Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
 		Map<String, List<String>> headers = new HashMap<>();
@@ -56,10 +70,14 @@ public class HttpUtils {
 		return headers;
 	}
 	
+	/**
+	 * 
+	 * @param host
+	 * @param requestDetails
+	 * @return
+	 */
 	public static ResponseEntity<Object> callAPI(String host, RequestDetails requestDetails) {
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
 		for(KeyValue header : requestDetails.getHeaders()) {
 			List<String> value = header.getValues();
 			for(String val : value) {
