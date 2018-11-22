@@ -37,12 +37,26 @@ import com.github.tomakehurst.wiremock.recording.RecordSpecBuilder;
  */
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class RequestDetails {
+	
+	private String name;
 
 	private String path;
 	private HttpMethod method;
 	private Set<KeyValue> headers;
 	private Set<KeyValue> queryParams;
 	private String body;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setMethod(HttpMethod method) {
+		this.method = method;
+	}
 
 	public String getPath() {
 		return path;
@@ -131,6 +145,10 @@ public class RequestDetails {
 			mappingBuilder = WireMock.get(urlPattern);
 			break;
 		}
+		
+		if(StringUtils.isEmpty(getName())) {
+			mappingBuilder.withName(getName());
+		}
 
 		if (!StringUtils.isEmpty(getBody())) {
 			StringValuePattern requestBodyPattern = new EqualToJsonPattern(getBody(), true, true);
@@ -145,7 +163,7 @@ public class RequestDetails {
 
 		for (KeyValue queryParam : getQueryParams()) {
 			for (String value : queryParam.getValues()) {
-				mappingBuilder.withHeader(queryParam.getKey(), WireMockUtils.getEqulPattern(value));
+				mappingBuilder.withQueryParam(queryParam.getKey(), WireMockUtils.getEqulPattern(value));
 			}
 		}
 		return mappingBuilder;
@@ -188,6 +206,7 @@ public class RequestDetails {
 		requestDetails.setQueryParams(getKeyValuePairs(request.getQueryParameters()));
 		requestDetails.setMethod(request.getMethod().getName());
 		requestDetails.setPath(request.getUrlMatcher().getExpected());
+		requestDetails.setName(request.getName());
 		return requestDetails;
 	}
 

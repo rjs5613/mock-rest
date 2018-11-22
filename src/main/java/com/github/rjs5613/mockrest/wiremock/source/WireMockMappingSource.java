@@ -6,9 +6,6 @@ package com.github.rjs5613.mockrest.wiremock.source;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.github.rjs5613.mockrest.service.MappingService;
 import com.github.tomakehurst.wiremock.standalone.MappingsSource;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
@@ -18,11 +15,13 @@ import com.github.tomakehurst.wiremock.stubbing.StubMappings;
  * @author Rajesh
  *
  */
-@Service
-public class WireMockMongoMappingSource implements MappingsSource {
+public class WireMockMappingSource implements MappingsSource {
 	
-	@Autowired
 	private MappingService mappingService;
+
+	public void setMappingService(MappingService mappingService) {
+		this.mappingService = mappingService;
+	}
 
 	@Override
 	public void loadMappingsInto(StubMappings stubMappings) {

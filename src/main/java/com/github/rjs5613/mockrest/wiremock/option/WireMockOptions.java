@@ -1,7 +1,7 @@
 package com.github.rjs5613.mockrest.wiremock.option;
 
-import com.github.rjs5613.mockrest.config.SpringContext;
-import com.github.rjs5613.mockrest.wiremock.source.WireMockMongoMappingSource;
+import com.github.rjs5613.mockrest.service.MappingServiceFactory;
+import com.github.rjs5613.mockrest.wiremock.source.WireMockMappingSource;
 import com.github.tomakehurst.wiremock.core.MappingsSaver;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.standalone.MappingsLoader;
@@ -12,7 +12,7 @@ import com.github.tomakehurst.wiremock.standalone.MappingsSource;
  * @author Rajesh
  *
  */
-public class WireMockMongoOptions extends WireMockConfiguration {
+public class WireMockOptions extends WireMockConfiguration {
 
 	@Override
 	public MappingsLoader mappingsLoader() {
@@ -25,7 +25,9 @@ public class WireMockMongoOptions extends WireMockConfiguration {
 	}
 
 	private MappingsSource getMappingSource() {
-		return SpringContext.getAppContext().getBean(WireMockMongoMappingSource.class);
+		WireMockMappingSource mappingSource = new WireMockMappingSource();
+		mappingSource.setMappingService(MappingServiceFactory.getMappingService(""));
+		return mappingSource;
 	}
 
 }

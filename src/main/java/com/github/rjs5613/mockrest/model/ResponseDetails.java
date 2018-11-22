@@ -2,6 +2,7 @@ package com.github.rjs5613.mockrest.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -14,6 +15,8 @@ import com.github.tomakehurst.wiremock.http.ResponseDefinition;
 
 @JsonAutoDetect(fieldVisibility = Visibility.ANY)
 public class ResponseDetails {
+	
+	String a = "{\"diagnosis\" : \"1\"}";
 	
 	private String body;
 	private List<KeyValue> headers;
@@ -28,6 +31,9 @@ public class ResponseDetails {
 	}
 	
 	public List<KeyValue> getHeaders() {
+		if(null == headers) {
+			return Collections.emptyList();
+		}
 		return headers;
 	}
 	
@@ -47,7 +53,7 @@ public class ResponseDetails {
 		ResponseDefinitionBuilder aResponse = WireMock.aResponse();
 		aResponse.withBody(body);
 		aResponse.withStatus(status);
-		for(KeyValue header : headers) {
+		for(KeyValue header : getHeaders()) {
 			for(String val  : header.getValues()) {
 				aResponse.withHeader(header.getKey(), val);
 			}

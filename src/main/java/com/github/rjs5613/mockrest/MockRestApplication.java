@@ -7,7 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.github.rjs5613.mockrest.util.WireMockUtils;
-import com.github.rjs5613.mockrest.wiremock.option.WireMockMongoOptions;
+import com.github.rjs5613.mockrest.wiremock.option.WireMockOptions;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 @SpringBootApplication
@@ -33,7 +33,7 @@ public class MockRestApplication {
 	
 	private static class WireMockStarter{
 		private void startWireMock() {
-			WireMockMongoOptions options = new WireMockMongoOptions();
+			WireMockOptions options = new WireMockOptions();
 			options.port(wireMockPort);
 			mockServer = new WireMockServer(options);
 			mockServer.start();

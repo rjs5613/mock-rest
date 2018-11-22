@@ -16,6 +16,7 @@ import com.github.rjs5613.mockrest.MockRestApplication;
 import com.github.rjs5613.mockrest.model.MappingDetails;
 import com.github.rjs5613.mockrest.model.RecordingSpecification;
 import com.github.rjs5613.mockrest.service.MappingService;
+import com.github.rjs5613.mockrest.service.MappingServiceFactory;
 import com.github.rjs5613.mockrest.service.WireMockService;
 import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 
@@ -31,8 +32,7 @@ public class MappingController {
 	@Autowired
 	private WireMockService wireMockService;
 	
-	@Autowired
-	private MappingService mappingService;
+	private MappingService mappingService = MappingServiceFactory.getMappingService("");
 	
 	@GetMapping
 	public Set<MappingDetails> getAllMappings(){

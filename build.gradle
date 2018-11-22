@@ -26,6 +26,8 @@ repositories {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+	compile('org.postgresql:postgresql:9.4-1206-jdbc42')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.18.0'
 	compile group: 'org.json', name: 'json', version: '20160810'
